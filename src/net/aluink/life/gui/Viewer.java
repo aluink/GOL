@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,11 +19,11 @@ import net.aluink.life.model.Board;
 
 public class Viewer extends JPanel {
 
-	public static final int FACTOR = 3;
+	public static final int FACTOR = 8;
 	
 	private static final long serialVersionUID = -746836099092120549L;
 	
-	boolean paused = false;
+	boolean paused = true;
 	
 	Board b;
 	
@@ -55,11 +59,13 @@ public class Viewer extends JPanel {
 	static class ToggleListener implements MouseListener{
 
 		Viewer v;
-		JButton b;
+		JButton b, ex, im;
 		
-		public ToggleListener(JButton start, Viewer v) {
+		public ToggleListener(JButton start, Viewer v, JButton ex, JButton im) {
 			b = start;
 			this.v = v;
+			this.ex = ex;
+			this.im = im;
 		}
 
 		@Override
@@ -78,14 +84,18 @@ public class Viewer extends JPanel {
 		public void mouseReleased(MouseEvent e) {
 			if(v.paused){
 				v.paused = false;
-				b.setText("Start");
+				im.setEnabled(false);
+				ex.setEnabled(false);
+				b.setText("Stop");
 			} else {
 				v.paused = true;
-				b.setText("Stop");
+				im.setEnabled(true);
+				ex.setEnabled(true);
+				b.setText("Start");
 			}
 		}
 	}
-
+	
 	static class ClearListener implements MouseListener {
 
 		Viewer v;
@@ -139,16 +149,115 @@ public class Viewer extends JPanel {
 			int x = e.getX()/FACTOR;
 			int y = e.getY()/FACTOR;
 			
-			v.b.setPos(y, x, 2);
+			if(v.b.getPos(y,x) > 0){
+				v.b.setPos(y, x, 0);
+			} else {
+				v.b.setPos(y, x, 2);
+			}
 			v.repaint();
 			
 		}
 		
 	}
 	
+	static class ImportListener implements MouseListener {
+
+		Viewer v;
+		
+		public ImportListener(Viewer v) {
+			this.v = v;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			File f = new File("import.dat");
+			if(f.exists()){
+				Board b = new Board(f);
+				v.b = b;
+				v.repaint();
+			}
+		}
+		
+	}
+	
+	static class ExportListener implements MouseListener {
+
+		Board b;
+		
+		public ExportListener(Viewer v) {
+			b = v.b;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+
+		@Override
+		public void mouseExited(MouseEvent e) {}
+
+		@Override
+		public void mousePressed(MouseEvent e) {}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			DataOutputStream fw = null;
+			try {
+				fw = new DataOutputStream(new FileOutputStream(new File("export.dat")));
+				fw.writeInt(b.getHeight());
+//				System.out.println("h: " + b.getHeight());
+				fw.writeInt(b.getWidth());
+//				System.out.println("w: " + b.getWidth());
+				for(int i = 0;i < b.getHeight();i++){
+					for(int j = 0;j < b.getWidth();j++){
+						fw.writeInt(b.getPos(i,j));
+//						System.out.println(b.getPos(i,j));
+					}
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} finally{
+				try {
+					if(fw != null){
+						fw.close();
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	
 	public static void main(String[] args) {
 		final int BUTTONS_HEIGHT = 100;
-		int w = 400, h = 250;
+		int w = 100, h = 45;
 		
 		Viewer v = new Viewer(new Board(h,w));
 		JFrame frame = new JFrame("Game of Life");
@@ -159,17 +268,29 @@ public class Viewer extends JPanel {
 		
 		JPanel buttons = new JPanel();
 		buttons.setSize(w,BUTTONS_HEIGHT);
-		JButton start, clear;
-		start = new JButton("Start");
-		start.setSize(BUTTONS_HEIGHT*3, BUTTONS_HEIGHT);
-		start.addMouseListener(new ToggleListener(start, v));
+		JButton start, clear, export, impo;
+		
 		
 		clear = new JButton("Clear");
 		clear.setSize(BUTTONS_HEIGHT*3, BUTTONS_HEIGHT);
 		clear.addMouseListener(new ClearListener(v));
 		
+		export = new JButton("Export");
+		export.setSize(BUTTONS_HEIGHT*3, BUTTONS_HEIGHT);
+		export.addMouseListener(new ExportListener(v));
+		
+		impo = new JButton("Import");
+		impo.setSize(BUTTONS_HEIGHT*3, BUTTONS_HEIGHT);
+		impo.addMouseListener(new ImportListener(v));
+		
+		start = new JButton("Start");
+		start.setSize(BUTTONS_HEIGHT*3, BUTTONS_HEIGHT);
+		start.addMouseListener(new ToggleListener(start, v, export, impo));
+		
 		buttons.add(start);
 		buttons.add(clear);
+		buttons.add(export);
+		buttons.add(impo);
 		
 		v.addMouseListener(new ModifyListener(v));
 		

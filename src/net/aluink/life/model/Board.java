@@ -1,5 +1,10 @@
 package net.aluink.life.model;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Random;
 
 
@@ -16,6 +21,36 @@ public class Board {
 		for(int i = 0;i < getHeight();i++){
 			for(int j = 0;j < getWidth();j++){
 				setPos(i,j,rnd.nextInt()%4);
+			}
+		}
+	}
+
+	public Board(File f) {
+		DataInputStream fr = null;
+		try {
+			fr = new DataInputStream(new FileInputStream((f)));
+			this.height = fr.readInt();
+			this.width = fr.readInt();
+			System.out.println("h: " + height);
+			System.out.println("w: " + width);
+			reset();
+			for(int i = 0;i < height;i++){
+				for(int j = 0;j < width;j++){
+					setPos(i,j,fr.readInt());
+					System.out.println(getPos(i,j));
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(fr != null){
+					fr.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -51,6 +86,5 @@ public class Board {
 	public int[][] getPos() {
 		// TODO Auto-generated method stub
 		return pos;
-	}
-	
+	}	
 }

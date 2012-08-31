@@ -19,7 +19,7 @@ import net.aluink.life.model.Board;
 
 public class Viewer extends JPanel {
 
-	private static final int SLEEP_TIME = 1000;
+	private static final int SLEEP_TIME = 30;
 
 	public static final int FACTOR = 10;
 	
@@ -171,28 +171,16 @@ public class Viewer extends JPanel {
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseClicked(MouseEvent e) {}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseEntered(MouseEvent e) {}
 
 		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseExited(MouseEvent e) {}
 
 		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mousePressed(MouseEvent e) {}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
@@ -246,7 +234,6 @@ public class Viewer extends JPanel {
 						fw.close();
 					}
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

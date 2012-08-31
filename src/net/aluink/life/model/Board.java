@@ -31,13 +31,10 @@ public class Board {
 			fr = new DataInputStream(new FileInputStream((f)));
 			this.height = fr.readInt();
 			this.width = fr.readInt();
-			System.out.println("h: " + height);
-			System.out.println("w: " + width);
 			reset();
 			for(int i = 0;i < height;i++){
 				for(int j = 0;j < width;j++){
 					setPos(i,j,fr.readInt());
-					System.out.println(getPos(i,j));
 				}
 			}
 		} catch (FileNotFoundException e) {

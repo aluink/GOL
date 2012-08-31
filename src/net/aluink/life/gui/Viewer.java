@@ -14,7 +14,7 @@ import net.aluink.life.model.Board;
 
 public class Viewer extends JPanel {
 
-	public static final int FACTOR = 8;
+	public static final int FACTOR = 3;
 	
 	private static final long serialVersionUID = -746836099092120549L;
 	
@@ -81,9 +81,6 @@ public class Viewer extends JPanel {
 				b.setText("Stop");
 			}
 		}
-
-			
-		
 	}
 
 	static class ClearListener implements MouseListener {
@@ -108,7 +105,8 @@ public class Viewer extends JPanel {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			v.b.reset();			
+			v.b.reset();
+			v.repaint();
 		}
 		
 	}
@@ -147,7 +145,7 @@ public class Viewer extends JPanel {
 	
 	public static void main(String[] args) {
 		final int BUTTONS_HEIGHT = 100;
-		int w = 100, h =50;
+		int w = 400, h = 250;
 		
 		Viewer v = new Viewer(new Board(h,w));
 		JFrame frame = new JFrame("Game of Life");

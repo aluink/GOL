@@ -1,6 +1,7 @@
 package net.aluink.life.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -29,10 +30,12 @@ public class Viewer extends JPanel {
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
+		Color [] colors = {Color.RED, Color.BLUE, Color.GREEN};
 		g.clearRect(0, 0, getWidth(), getHeight());
 		for(int i = 0;i < b.getHeight();i++){
 			for(int j = 0;j < b.getWidth();j++){
-				if(b.getPos(i, j)){
+				if(b.getPos(i, j) > 0){
+					g.setColor(colors[b.getPos(i,j)%4-1]);
 					g.fillRect(j*FACTOR, i*FACTOR, FACTOR, FACTOR);
 				}
 			}
@@ -136,7 +139,7 @@ public class Viewer extends JPanel {
 			int x = e.getX()/FACTOR;
 			int y = e.getY()/FACTOR;
 			
-			v.b.setPos(y, x, true);
+			v.b.setPos(y, x, 2);
 			v.repaint();
 			
 		}

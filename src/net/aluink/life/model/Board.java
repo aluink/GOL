@@ -4,23 +4,23 @@ import java.util.Random;
 
 
 public class Board {
-	boolean pos [][];
+	int pos [][];
 	int width;
 	int height;
 	
 	public Board(int h, int w){
 		this.width = w;
 		this.height = h;
-		pos = new boolean[h][w];
+		pos = new int[h][w];
 		Random rnd = new Random(1);
 		for(int i = 0;i < getHeight();i++){
 			for(int j = 0;j < getWidth();j++){
-				setPos(i,j,rnd.nextBoolean());
+				setPos(i,j,rnd.nextInt()%4);
 			}
 		}
 	}
 
-	public boolean getPos(int h, int w){
+	public int getPos(int h, int w){
 		return pos[h][w];
 	}
 	
@@ -40,15 +40,15 @@ public class Board {
 		this.height = height;
 	}
 
-	public void setPos(int h, int w, boolean v) {
-		pos[h][w] = v;
+	public void setPos(int h, int w, int v) {
+		pos[h][w] = v%4;
 	}
 	
 	public void reset(){
-		pos = new boolean[height][width];
+		pos = new int[height][width];
 	}
 
-	public boolean[][] getPos() {
+	public int[][] getPos() {
 		// TODO Auto-generated method stub
 		return pos;
 	}

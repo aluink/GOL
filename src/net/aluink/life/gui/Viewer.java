@@ -19,7 +19,9 @@ import net.aluink.life.model.Board;
 
 public class Viewer extends JPanel {
 
-	public static final int FACTOR = 8;
+	private static final int SLEEP_TIME = 1000;
+
+	public static final int FACTOR = 10;
 	
 	private static final long serialVersionUID = -746836099092120549L;
 	
@@ -52,7 +54,7 @@ public class Viewer extends JPanel {
 				MasterMaker.iterate(b);
 				repaint(0,0,getWidth(), getHeight());
 			}
-			try {Thread.sleep(30);} catch (InterruptedException e) {}
+			try {Thread.sleep(SLEEP_TIME);} catch (InterruptedException e) {}
 		}
 	}
 	
@@ -230,13 +232,10 @@ public class Viewer extends JPanel {
 			try {
 				fw = new DataOutputStream(new FileOutputStream(new File("export.dat")));
 				fw.writeInt(b.getHeight());
-//				System.out.println("h: " + b.getHeight());
 				fw.writeInt(b.getWidth());
-//				System.out.println("w: " + b.getWidth());
 				for(int i = 0;i < b.getHeight();i++){
 					for(int j = 0;j < b.getWidth();j++){
 						fw.writeInt(b.getPos(i,j));
-//						System.out.println(b.getPos(i,j));
 					}
 				}
 			} catch (IOException e1) {
@@ -257,7 +256,7 @@ public class Viewer extends JPanel {
 	
 	public static void main(String[] args) {
 		final int BUTTONS_HEIGHT = 100;
-		int w = 100, h = 45;
+		int w = 30, h = 30;
 		
 		Viewer v = new Viewer(new Board(h,w));
 		JFrame frame = new JFrame("Game of Life");
